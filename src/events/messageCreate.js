@@ -5,6 +5,10 @@ module.exports = {
 	name: 'messageCreate',
 	async execute(message, bot) {
         if(message.author.bot) return;
+
+        const guildId = message.guild.id;
+        if(message.member.roles.cache.has(Config.Roles[guildId].MUTED)) return message.delete();
+
         if(!Config.Channels[message.guild.id].CommandsOnly.includes(message.channel.id)) return;
         if(message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return;
 
