@@ -9,6 +9,9 @@ module.exports = {
 		.setDescription(`Get member profile`)
         .addUserOption(opt => opt.setName('user').setDescription('User whose profile you want to see')),
 	async execute(interaction, bot) {
+        const guildId = interaction.guild.id;
+        if(!interaction.member.roles.cache.has(Config.Roles[guildId].SEEKER)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`This command is reserved for our seekers`)], ephemeral: true});
+
         let user = interaction.options.getUser('user') || interaction.user;
         let userId = user.id;
 

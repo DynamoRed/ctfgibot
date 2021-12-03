@@ -11,6 +11,9 @@ module.exports = {
             .setDescription('OPTIONAL | Sessions timestamp')
             .addChoices([['Scheduled','upcoming'], ['Actives','now'], ['Terminated', 'past']])),
 	async execute(interaction, bot) {
+        const guildId = interaction.guild.id;
+        if(!interaction.member.roles.cache.has(Config.Roles[guildId].SEEKER)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`This command is reserved for our seekers`)], ephemeral: true});
+
         let chosenTimestamp = interaction.options.getString('timestamp');
 
         let timestampQuery = `CURRENT_TIMESTAMP() < end_at`;

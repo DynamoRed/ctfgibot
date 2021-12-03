@@ -12,6 +12,8 @@ module.exports = {
         .addStringOption(opt => opt.setName('identifier').setDescription("Your HackTheBox account identifier (Can be found at https://app.hackthebox.com/profile/settings)").setRequired(true)),
 	async execute(interaction, bot) {
         const guildId = interaction.guild.id;
+        if(interaction.member.roles.cache.has(Config.Roles[guildId].SEEKER)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`This command is reserved for unregistered members`)], ephemeral: true});
+
         const mygesMailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@myges.fr$/;
         const nameRegex = /^([\w]{3,})+\s+([\w\s]{3,})+$/i;
 
