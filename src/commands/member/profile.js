@@ -24,7 +24,7 @@ module.exports = {
             })
         })
 
-		bot.Database.query(`SELECT name, htb_token, email, open_points FROM members WHERE discord_id = ?;`, [userId], async (err, sqlRes) => {
+		bot.Database.query(`SELECT members.id, name, htb_token, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members WHERE discord_id = ?;`, [userId], async (err, sqlRes) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
@@ -56,7 +56,7 @@ module.exports = {
                             ${userRoles}
 
                             \`\`\`\n 📦 HackTheBox \n\`\`\`
-                            » **Account:** ${jsonData.user_name}#${jsonData.user_id}
+                            » **Account:** [${jsonData.user_name}#${jsonData.user_id}](https://app.hackthebox.com/profile/${jsonData.user_id})
                             » **Rank:** ${jsonData.rank}
                             ${jsonData.hof_position == "unranked" ? `» Unranked` : `» **#${jsonData.hof_position}** world ranked`}
                             ${jsonData.vip || jsonData.dedivip ? `» ⭐ **VIP**` : ``}`);
