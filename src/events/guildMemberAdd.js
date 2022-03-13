@@ -5,7 +5,7 @@ const https = require('https');
 module.exports = {
 	name: 'guildMemberAdd',
 	async execute(member, bot) {
-		console.log(`~ Member join: ${member.user.tag}`.yellow.italic);
+		bot.Funcs.writeLog(`Member join: ${member.user.tag}`);
 
         member.roles.add(Config.Roles[member.guild.id].MEMBER);
 

@@ -2,28 +2,32 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
 module.exports = {
-	event: 'ready',
+	name: 'ready',
 	once: true,
 	async execute(bot) {
-		console.log('Bot online !'.green);
-
 		const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+
+		bot.Funcs.writeLog(`Registering Commands to Discord API`, 'title');
 
 		(async () => {
 			try {
-				console.log(`Rafraichissement des commandes '/' ...`.blue);
+				bot.Funcs.writeLog(`Loading 'slash' commands...`);
 				
-				bot.guilds.cache.forEach(async guild => {
-					console.log(`Asking API for guild ${guild.id}`.red);
-					
-					await rest.put(Routes.applicationGuildCommands(bot.user.id, guild.id), {
-						body: bot.commandArray,
-					});
-				})
-
-				console.log(`Rafraichissement réussi`.green.bold);
-			} catch (error) {
-				console.log(`${error}`);
+				setTimeout(() => {
+					bot.guilds.cache.forEach(async guild => {
+						bot.Funcs.writeLog(`Asking API for guild ${guild.id}`, 'log');
+						
+						await rest.put(Routes.applicationGuildCommands(bot.user.id, guild.id), {
+							body: bot.commandArray,
+						});
+					})
+	
+					bot.Funcs.writeLog(`Commands successfully registered`, 'success');
+	
+					bot.Funcs.writeLog(`Bot start successfully`, 'header');
+				}, 10);
+			} catch (err) {
+				bot.Funcs.writeLog(`${err}`, 'error');
 			}
 		})();
 	},

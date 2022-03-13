@@ -23,7 +23,7 @@ module.exports = {
             if(chosenTimestamp == "past") timestampQuery = `CURRENT_TIMESTAMP() > end_at LIMIT 7`;
         }
 
-		bot.Database.query(`SELECT name, UNIX_TIMESTAMP(end_at) as end, UNIX_TIMESTAMP(start_at) as start FROM sessions WHERE ${timestampQuery};`, async (err, result) => {
+		bot.Database.query(`SELECT id, name, UNIX_TIMESTAMP(end_at) as end, UNIX_TIMESTAMP(start_at) as start FROM sessions WHERE ${timestampQuery};`, async (err, result) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
@@ -68,17 +68,17 @@ module.exports = {
                 if(resultIdx == result.length){
                     if(activesSessions.length != 0) activesSessionsString += `\n» **${activesSessions.length} session${activesSessions.length > 1 ? 's' : ''} currently running**\n`;
                     activesSessions.forEach(session => {
-                        activesSessionsString += `\n» (<:active:916093825137643580> Active) **${session.name}** _(End <t:${session.end}:R>)_`;
+                        activesSessionsString += `\n» (<:active:916093825137643580> Active) \`ID: #${session.id}\` **${session.name}** _(End <t:${session.end}:R>)_`;
                     })
 
                     if(upcomingsSessions.length != 0) upcomingsSessionsString += `\n» **${upcomingsSessions.length} scheduled session${upcomingsSessions.length > 1 ? 's' : ''}**\n`;    
                     upcomingsSessions.forEach(session => {
-                        upcomingsSessionsString += `\n» ${session.name} _(Start <t:${session.start}:R>)_`;
+                        upcomingsSessionsString += `\n» \`ID: #${session.id}\` **${session.name}** _(Start <t:${session.start}:R>)_`;
                     })
 
                     if(pastsSessions.length != 0) pastsSessionsString += `\n» **${pastsSessions.length} terminated session${pastsSessions.length > 1 ? 's' : ''}**\n`; 
                     pastsSessions.forEach(session => {
-                        pastsSessionsString += `\n» ${session.name} _(Ended <t:${session.end}:R>)_`;
+                        pastsSessionsString += `\n» \`ID: #${session.id}\` **${session.name}** _(Ended <t:${session.end}:R>)_`;
                     })
 
                     if(activesSessions.length == 0) activesSessionsString += `\n» **No session currently running**`;

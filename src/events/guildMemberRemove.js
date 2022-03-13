@@ -4,6 +4,8 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'guildMemberRemove',
 	async execute(member, bot) {
+		bot.Funcs.writeLog(`~ Member left: ${member.user.tag}`);
+
         let logEmb = new MessageEmbed() 
             .setColor(Config.Colors.Red)
             .setDescription(`\`\`\`\n 📤 Member left \n\`\`\`

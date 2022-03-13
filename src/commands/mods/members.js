@@ -20,7 +20,7 @@ module.exports = {
             })
         })
         
-        bot.Database.query(`SELECT name, htb_token, email, open_points FROM members;`, async (err, result) => {
+        bot.Database.query(`SELECT members.id, name, htb_token, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members;`, async (err, result) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
@@ -38,7 +38,7 @@ module.exports = {
             result.forEach(async sqlRes => {
                 resultIdx++;
 
-                membersTable.addRow(sqlRes.name, sqlRes.open_points);
+                membersTable.addRow(sqlRes.name, sqlRes.open_points > 0 ? sqlRes.open_points : 0);
                             
                 if(resultIdx == result.length) {
                     membersTable.sortColumn(1, (a, b) => { return b - a; });

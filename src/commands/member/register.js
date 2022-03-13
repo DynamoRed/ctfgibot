@@ -62,7 +62,7 @@ module.exports = {
                         let emb = new MessageEmbed() 
                             .setColor(Config.Colors.Transparent)
                             .setDescription(`\`\`\`\n ✅ Registration successful \n\`\`\`
-                            » **HackTheBox Account:** ${jsonData.user_name}#${jsonData.user_id} ${jsonData.vip || jsonData.dedivip ? ` - (⭐ VIP)` : ``}
+                            » **HackTheBox Account:** [${jsonData.user_name}#${jsonData.user_id}](https://app.hackthebox.com/profile/${jsonData.user_id}) ${jsonData.vip || jsonData.dedivip ? ` - (⭐ VIP)` : ``}
                             » **HackTheBox Rank:** ${jsonData.rank}`);
                         
                         await interaction.reply({embeds: [emb], ephemeral: true});
@@ -74,7 +74,7 @@ module.exports = {
                             » **Email:** ${submitMail}
                             » **Name:** ${submitName}
 
-                            » **HackTheBox Account:** ${jsonData.user_name}#${jsonData.user_id} ${jsonData.vip || jsonData.dedivip ? ` - (⭐ VIP)` : ``}
+                            » **HackTheBox Account:** [${jsonData.user_name}#${jsonData.user_id}](https://app.hackthebox.com/profile/${jsonData.user_id}) ${jsonData.vip || jsonData.dedivip ? ` - (⭐ VIP)` : ``}
                             » **HackTheBox Rank:** ${jsonData.rank}`);
 
                         interaction.guild.channels.cache.get(Config.Channels[guildId].LOGS).send({embeds: [logEmb]});
