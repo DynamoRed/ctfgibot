@@ -50,7 +50,7 @@ module.exports = {
                             .setAuthor(user.tag + " profile", user.avatarURL())
                             .setDescription(`\`\`\`\n 🌍 Global Informations \n\`\`\`
                             » **Name:** ${user}
-                            » **${resultUser.open_points}** open points owned
+                            » **${resultUser.open_points > 0 ? resultUser.open_points : 0}** open points owned
 
                             \`\`\`\n ⚒️ Ranks \n\`\`\`
                             ${userRoles}
