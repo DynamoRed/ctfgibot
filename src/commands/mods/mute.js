@@ -19,10 +19,10 @@ module.exports = {
 		if(gTarget.roles.cache.has(Config.Roles[guildId].MUTED)){
 			return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`This user is already muted !`)], ephemeral: true});
 		}
-        
+
 		try {
 			gTarget.roles.add(Config.Roles[guildId].MUTED, `${reason ? reason : ""}`);
-			
+
 			let emb = new MessageEmbed()
 				.setColor(Config.Colors.Green)
 				.setDescription(`\`\`\`\n 🔇User muted \n\`\`\`

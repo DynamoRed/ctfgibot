@@ -18,7 +18,7 @@ module.exports = {
         https.get(`https://www.hackthebox.com/`, res => {
             let data = '';
 			res.on('data', c => { data += c });
-            
+
             res.on('end', async () => {
                 if(res.statusCode != 200) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`HackTheBox servers seems down ! Please wait...`)], ephemeral: true});
             })
@@ -41,11 +41,11 @@ module.exports = {
                     if(res.statusCode == 200){
                         let jsonData = JSON.parse(data);
                         if(!jsonData) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when recovering user data !`)], ephemeral: true});
-                        
+
                         let userRoles = "";
                         interaction.guild.members.cache.find(m => m.user.id == userId).roles.cache.forEach(r => { if(!r.name.includes("everyone")) userRoles += `<@&${r.id}> `; });
 
-                        let emb = new MessageEmbed() 
+                        let emb = new MessageEmbed()
                             .setColor(Config.Colors.Transparent)
                             .setAuthor(user.tag + " profile", user.avatarURL())
                             .setDescription(`\`\`\`\n 🌍 Global Informations \n\`\`\`

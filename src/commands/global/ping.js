@@ -13,7 +13,7 @@ module.exports = {
 			res.on('data', c => { data += c });
 
             res.on('end', async () => {
-				let emb = new MessageEmbed() 
+				let emb = new MessageEmbed()
 					.setColor(Config.Colors.Transparent)
 					.setDescription(`\`\`\`\n ⏰ Latencies \n\`\`\`
 					» **Client:** \`${Date.now() - interaction.createdTimestamp}ms\`

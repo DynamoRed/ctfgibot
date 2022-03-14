@@ -6,7 +6,7 @@ module.exports = {
 	async execute(member, bot) {
 		bot.Funcs.writeLog(`~ Member left: ${member.user.tag}`);
 
-        let logEmb = new MessageEmbed() 
+        let logEmb = new MessageEmbed()
             .setColor(Config.Colors.Red)
             .setDescription(`\`\`\`\n 📤 Member left \n\`\`\`
             » <@${member.user.id}> just left our server`);

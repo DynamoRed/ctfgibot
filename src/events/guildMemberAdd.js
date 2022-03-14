@@ -13,7 +13,7 @@ module.exports = {
             if (err) throw err;
 
             if(sqlRes.length != 1){
-                let logEmb = new MessageEmbed() 
+                let logEmb = new MessageEmbed()
                     .setColor(Config.Colors.Green)
                     .setDescription(`\`\`\`\n 📥 New member \n\`\`\`
                     » <@${member.user.id}> just join our server`);
@@ -30,27 +30,27 @@ module.exports = {
                         if(res.statusCode == 200){
                             let jsonData = JSON.parse(data);
                             if(!jsonData){
-                                let logEmb = new MessageEmbed() 
+                                let logEmb = new MessageEmbed()
                                     .setColor(Config.Colors.Green)
                                     .setDescription(`\`\`\`\n 📥 New member \n\`\`\`
                                     » <@${member.user.id}> just join our server`);
 
                                 member.guild.channels.cache.get(Config.Channels[member.guild.id].LOGS).send({embeds: [logEmb]});
-                                
+
                                 return;
                             }
-                            
+
                             member.roles.add(Config.Roles[member.guild.id].SEEKER);
                             member.setNickname(resultUser.name);
 
-                            let logEmb = new MessageEmbed() 
+                            let logEmb = new MessageEmbed()
                                 .setColor(Config.Colors.Green)
                                 .setDescription(`\`\`\`\n 📥 Member rejoin \n\`\`\`
                                 » <@${member.user.id}> just rejoin our server`);
 
                             member.guild.channels.cache.get(Config.Channels[member.guild.id].LOGS).send({embeds: [logEmb]});
                         } else {
-                            let logEmb = new MessageEmbed() 
+                            let logEmb = new MessageEmbed()
                                 .setColor(Config.Colors.Green)
                                 .setDescription(`\`\`\`\n 📥 New member \n\`\`\`
                                 » <@${member.user.id}> just join our server`);

@@ -12,7 +12,7 @@ module.exports = {
 
         const guildId = interaction.guild.id;
         let count = interaction.options.getInteger('count');
-        
+
 		let emb = new MessageEmbed()
             .setColor(Config.Colors.Green)
 			.setDescription(`\`\`\`\n 🗑️ ${count} messages cleared \n\`\`\``);

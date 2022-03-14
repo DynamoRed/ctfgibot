@@ -17,7 +17,7 @@ module.exports = {
 		if(!gTarget.roles.cache.has(Config.Roles[guildId].MUTED)){
 			return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`This user isn't muted !`)], ephemeral: true});
 		}
-        
+
 		try {
 			gTarget.roles.remove(Config.Roles[guildId].MUTED);
 

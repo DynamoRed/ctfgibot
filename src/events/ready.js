@@ -12,18 +12,18 @@ module.exports = {
 		(async () => {
 			try {
 				bot.Funcs.writeLog(`Loading 'slash' commands...`);
-				
+
 				setTimeout(() => {
 					bot.guilds.cache.forEach(async guild => {
 						bot.Funcs.writeLog(`Asking API for guild ${guild.id}`, 'log');
-						
+
 						await rest.put(Routes.applicationGuildCommands(bot.user.id, guild.id), {
 							body: bot.commandArray,
 						});
 					})
-	
+
 					bot.Funcs.writeLog(`Commands successfully registered`, 'success');
-	
+
 					bot.Funcs.writeLog(`Bot start successfully`, 'header');
 				}, 10);
 			} catch (err) {

@@ -1,7 +1,7 @@
 module.exports = (bot) => {
 	bot.handleEvents = async (eventFiles, path, callback) => {
 		bot.Funcs.writeLog(`Handling events`, 'title');
-		
+
 		bot.Funcs.writeLog(`Scanning events folder`);
 		for (const file of eventFiles) {
 			const event = require(`../events/${file}`);

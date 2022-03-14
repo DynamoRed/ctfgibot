@@ -8,8 +8,8 @@ module.exports = {
 		.setDescription(`DEV ONLY | Make bot restarting`),
 	async execute(interaction, bot) {
 		if(interaction.user.id != "324956349353951232") return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-		
-		let emb = new MessageEmbed() 
+
+		let emb = new MessageEmbed()
             .setColor(Config.Colors.Transparent)
             .setDescription(`\`\`\`\n 🔁 Restarting... \n\`\`\``);
 

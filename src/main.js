@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
-const mysql = require('mysql');                                  
+const mysql = require('mysql');
 const colours = require('colour');
 const Config = require('../conf');
 const { Client, Intents, Collection, MessageEmbed } = require('discord.js');
@@ -100,7 +100,7 @@ bot.Funcs.writeLog = (log, type) => {
 }
 
 bot.Funcs.getErrorEmbed = content => {
-	let errorEmbed = new MessageEmbed() 
+	let errorEmbed = new MessageEmbed()
 		.setColor(Config.Colors.Red)
 		.setDescription(`\`\`\`\n${content}\n\`\`\``);
 	return errorEmbed;
@@ -108,7 +108,7 @@ bot.Funcs.getErrorEmbed = content => {
 
 function startBot(){
 	bot.Funcs.writeLog(`Starting app... (${logFilePath.split('/')[logFilePath.split('/').length-1]})`, 'header');
-	
+
 	bot.Database.query("SELECT * FROM members WHERE id = 0", function(err) {
 		bot.Funcs.writeLog(`Database loading`, 'title');
 		setTimeout(() => {
@@ -122,7 +122,7 @@ function startBot(){
 
 	(async () => {
 		for (handler of handlers) require(`./handlers/${handler}`)(bot)
-	
+
 		bot.handleCommands(commands, './src/commands');
 		bot.handleEvents(events, './src/events');
 		bot.login(process.env.TOKEN);

@@ -48,7 +48,7 @@ module.exports = {
         ),
 	async execute(interaction, bot) {
         if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-	
-        
+
+
     }
 };

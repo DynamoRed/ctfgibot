@@ -17,10 +17,10 @@ module.exports = {
         let reason = interaction.options.getString('reason');
         let days = interaction.options.getString('days');
 		let gTarget = interaction.guild.members.cache.find(m => m.user.id == target.id);
-        
+
 		try {
 			gTarget.ban({ days: days || 0, reason: reason || "" });
-			
+
 			let emb = new MessageEmbed()
 				.setColor(Config.Colors.Green)
 				.setDescription(`\`\`\`\n 🔨 User banned \n\`\`\`

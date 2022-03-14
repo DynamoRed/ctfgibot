@@ -15,10 +15,10 @@ module.exports = {
         let target = interaction.options.getUser('target');
         let reason = interaction.options.getString('reason');
 		let gTarget = interaction.guild.members.cache.find(m => m.user.id == target.id);
-        
+
 		try {
 			gTarget.kick(`${reason ? reason : ""}`);
-			
+
 			let emb = new MessageEmbed()
 				.setColor(Config.Colors.Green)
 				.setDescription(`\`\`\`\n 🔇User kicked \n\`\`\`

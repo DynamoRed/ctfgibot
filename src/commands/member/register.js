@@ -20,7 +20,7 @@ module.exports = {
         https.get(`https://www.hackthebox.com/`, res => {
             let data = '';
 			res.on('data', c => { data += c });
-            
+
             res.on('end', async () => {
                 if(res.statusCode != 200) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`HackTheBox servers seems down ! Please wait...`)], ephemeral: true});
             })
@@ -34,7 +34,7 @@ module.exports = {
 
         if(!submitName.match(nameRegex)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Your name is not valid !`)], ephemeral: true});
         if(!submitMail.match(mygesMailRegex)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Your MyGES email is not valid !`)], ephemeral: true});
-        
+
         let firstName = submitName.split(' ')[0];
         let lastName = submitName.slice(firstName.length+1);
         submitName = firstName.charAt(0).toUpperCase() + firstName.toLowerCase().slice(1) + ' ' + lastName.toUpperCase();
@@ -59,15 +59,15 @@ module.exports = {
                             throw err;
                         }
 
-                        let emb = new MessageEmbed() 
+                        let emb = new MessageEmbed()
                             .setColor(Config.Colors.Transparent)
                             .setDescription(`\`\`\`\n ✅ Registration successful \n\`\`\`
                             » **HackTheBox Account:** [${jsonData.user_name}#${jsonData.user_id}](https://app.hackthebox.com/profile/${jsonData.user_id}) ${jsonData.vip || jsonData.dedivip ? ` - (⭐ VIP)` : ``}
                             » **HackTheBox Rank:** ${jsonData.rank}`);
-                        
+
                         await interaction.reply({embeds: [emb], ephemeral: true});
 
-                        let logEmb = new MessageEmbed() 
+                        let logEmb = new MessageEmbed()
                             .setColor(Config.Colors.Transparent)
                             .setDescription(`\`\`\`\n 📝 New registration \n\`\`\`
                             » **Discord Account:** ${interaction.user}
@@ -79,13 +79,13 @@ module.exports = {
 
                         interaction.guild.channels.cache.get(Config.Channels[guildId].LOGS).send({embeds: [logEmb]});
 
-                        let welcomeEmb = new MessageEmbed() 
+                        let welcomeEmb = new MessageEmbed()
                             .setColor(Config.Colors.Transparent)
                             .setDescription(`\`\`\`\n 👀 New Member ! \n\`\`\`
                             » **Welcome on board** ${interaction.user}`);
 
                         interaction.guild.channels.cache.get(Config.Channels[guildId].GENERAL).send({embeds: [welcomeEmb]});
-                        
+
                         let seekerRole = interaction.guild.roles.cache.find(r => r.id === Config.Roles[guildId].SEEKER);
                         interaction.member.setNickname(submitName);
                         interaction.member.roles.add(seekerRole);

@@ -41,7 +41,7 @@ module.exports = {
 
             let now = Math.round(Date.now()/1000);
 
-            let emb = new MessageEmbed() 
+            let emb = new MessageEmbed()
                 .setColor(Config.Colors.Transparent)
                 .setDescription(`\`\`\`\n 🚩 CTF Sessions \n\`\`\`
                 » **${result.length}** session${result.length > 1 ? 's' : ''} found in our database`);
@@ -50,11 +50,11 @@ module.exports = {
                 if(!chosenTimestamp || chosenTimestamp == "now") activesSessionsString += `\n» **No session currently running**`;
                 if(!chosenTimestamp || chosenTimestamp == "upcoming") upcomingsSessionsString += `\n» **No session scheduled**`;
                 if(chosenTimestamp && chosenTimestamp == "past") pastsSessionsString += `\n» **No session terminated**`;
-                
+
                 if(!chosenTimestamp || chosenTimestamp == "now") emb.description += `\n\n${activesSessionsString}`;
                 if(!chosenTimestamp || chosenTimestamp == "upcoming") emb.description += `\n\n${upcomingsSessionsString}`;
                 if(chosenTimestamp && chosenTimestamp == "past") emb.description += `\n\n${pastsSessionsString}`;
-                
+
                 return interaction.reply({embeds: [emb], ephemeral: true});
             }
 
@@ -71,12 +71,12 @@ module.exports = {
                         activesSessionsString += `\n» (<:active:916093825137643580> Active) \`ID: #${session.id}\` **${session.name}** _(End <t:${session.end}:R>)_`;
                     })
 
-                    if(upcomingsSessions.length != 0) upcomingsSessionsString += `\n» **${upcomingsSessions.length} scheduled session${upcomingsSessions.length > 1 ? 's' : ''}**\n`;    
+                    if(upcomingsSessions.length != 0) upcomingsSessionsString += `\n» **${upcomingsSessions.length} scheduled session${upcomingsSessions.length > 1 ? 's' : ''}**\n`;
                     upcomingsSessions.forEach(session => {
                         upcomingsSessionsString += `\n» \`ID: #${session.id}\` **${session.name}** _(Start <t:${session.start}:R>)_`;
                     })
 
-                    if(pastsSessions.length != 0) pastsSessionsString += `\n» **${pastsSessions.length} terminated session${pastsSessions.length > 1 ? 's' : ''}**\n`; 
+                    if(pastsSessions.length != 0) pastsSessionsString += `\n» **${pastsSessions.length} terminated session${pastsSessions.length > 1 ? 's' : ''}**\n`;
                     pastsSessions.forEach(session => {
                         pastsSessionsString += `\n» \`ID: #${session.id}\` **${session.name}** _(Ended <t:${session.end}:R>)_`;
                     })
@@ -88,7 +88,7 @@ module.exports = {
                     if(!chosenTimestamp || chosenTimestamp == "now") emb.description += `\n\n${activesSessionsString}`;
                     if(upcomingsSessions.length != 0) emb.description += `\n\n${upcomingsSessionsString}`;
                     if(pastsSessions.length != 0) emb.description += `\n\n${pastsSessionsString}`;
-                    
+
                     await interaction.reply({embeds: [emb], ephemeral: true});
                 }
             })

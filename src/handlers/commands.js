@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = (bot) => {	
+module.exports = (bot) => {
 	bot.handleCommands = async (commandFolders, path, callback) => {
 		bot.Funcs.writeLog(`Handling commands`, 'title');
 

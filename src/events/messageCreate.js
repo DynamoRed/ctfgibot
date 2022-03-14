@@ -18,7 +18,7 @@ module.exports = {
             repMessage.delete();
         }, 5000)
 
-        let logEmb = new MessageEmbed() 
+        let logEmb = new MessageEmbed()
             .setColor(Config.Colors.Transparent)
             .setDescription(`\`\`\`\n 🖊️ Blocked message \n\`\`\`
             » ${message.author} try to send \`${message.content}\` in ${message.channel}`);

@@ -16,7 +16,7 @@ module.exports = {
 		https.get(`https://www.hackthebox.com/`, res => {
             let data = '';
 			res.on('data', c => { data += c });
-            
+
             res.on('end', async () => {
                 if(res.statusCode != 200) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`HackTheBox servers seems down ! Please wait...`)], ephemeral: true});
             })
@@ -25,7 +25,7 @@ module.exports = {
         const sessionId = interaction.options.getInteger('session_id');
         const submittedFlag = interaction.options.getString('flag').trim();
 
-		const logEmb = new MessageEmbed() 
+		const logEmb = new MessageEmbed()
 			.setColor(Config.Colors.Transparent)
 			.setDescription(`\`\`\`\n 🚩 Flag submission \n\`\`\`
 			» ${interaction.user} submit a flag
@@ -48,9 +48,9 @@ module.exports = {
 					await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 					throw err;
 				}
-	
+
 				if(result.length == 0) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid session ID ! You can do \`/sessions\` to get a valid session ID`)], ephemeral: true});
-				
+
 				const sessionName = result[0].name;
 
 				bot.Database.query(`SELECT id, name, points FROM sessions_targets WHERE session_id = ? AND content = ?;`, [sessionId, submittedFlag], async (err, result) => {
@@ -58,9 +58,9 @@ module.exports = {
 						await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 						throw err;
 					}
-		
+
 					if(result.length != 1) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Whoops looks like you didn't find a valid flag for the session #${sessionId}`)], ephemeral: true});
-					
+
 					const targetId = result[0].id;
 					const targetPoints = result[0].points;
 
@@ -69,15 +69,15 @@ module.exports = {
 							await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 							throw err;
 						}
-			
+
 						if(result.length != 0) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You can't submit this flag for the session #${sessionId} ! (Maybe cause you already submit it)`)], ephemeral: true});
-						
+
 						bot.Database.query(`SELECT id FROM sessions_targets WHERE session_id = ${sessionId};`, async (err, result) => {
 							if (err){
 								await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 								throw err;
 							}
-				
+
 							const totalFlagsToFound = result.length;
 
 							bot.Database.query(`INSERT INTO sessions_targets_claims (member_id, target_id, points) VALUES (?, ?, ?);`, [
@@ -96,22 +96,22 @@ module.exports = {
 										throw err;
 									}
 
-									const emb = new MessageEmbed() 
+									const emb = new MessageEmbed()
 										.setColor(Config.Colors.Transparent)
 										.setDescription(`\`\`\`\n 👏 Congratulation ! \n\`\`\`
 										» **Flag:** ||${submittedFlag}||
 										» You earned **${targetPoints} open points** !`);
-									
-									await interaction.reply({embeds: [emb], ephemeral: true});	
 
-									const publicEmb = new MessageEmbed() 
+									await interaction.reply({embeds: [emb], ephemeral: true});
+
+									const publicEmb = new MessageEmbed()
 										.setColor(Config.Colors.Transparent)
 										.setDescription(`\`\`\`\n ✅ Valid flag submitted ! \n\`\`\`
 										» **Session:** \`#${sessionId}\` *(${sessionName})*
 										» ${interaction.user} found **${result.length} of the ${totalFlagsToFound} flags** for this session`);
-									
-									await interaction.channel.send({embeds: [publicEmb]});	
-								});														
+
+									await interaction.channel.send({embeds: [publicEmb]});
+								});
 							})
 						})
 					})
