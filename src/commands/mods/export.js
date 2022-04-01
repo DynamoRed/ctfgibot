@@ -10,7 +10,7 @@ module.exports = {
 	async execute(interaction, bot) {
 		if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
 
-        bot.Database.query(`SELECT members.id, name, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members;`, async (err, result) => {
+        bot.Database.query(`SELECT members.id, name, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members ORDER BY name;`, async (err, result) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
@@ -21,12 +21,12 @@ module.exports = {
             }
 
             let resultIdx = 0;
-            let infosStr = "NAME;EMAIL;POINTS";
+            let infosStr = "NAME;EMAIL;POINTS\n;;";
 
             result.forEach(async sqlRes => {
                 resultIdx++;
 
-                infosStr += `\n${sqlRes.name.replace(";","_")};${sqlRes.email.replace(";","_")};${sqlRes.open_points > 0 ? sqlRes.open_points : 0};`;
+                infosStr += `\n${sqlRes.name.replace(";","_")};${sqlRes.email.replace(";","_")};${sqlRes.open_points > 0 ? sqlRes.open_points >= 4 ? 4 : sqlRes.open_points : 0};`;
 
                 if(resultIdx == result.length) {
                     fs.writeFile('./temp.csv', infosStr, (err) => {
