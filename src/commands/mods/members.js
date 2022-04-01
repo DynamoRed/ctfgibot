@@ -20,7 +20,7 @@ module.exports = {
             })
         })
 
-        bot.Database.query(`SELECT members.id, name, htb_token, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members;`, async (err, result) => {
+        bot.Database.query(`SELECT members.id, name, htb_token, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members ORDER BY open_points DESC;`, async (err, result) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
@@ -29,19 +29,21 @@ module.exports = {
             let membersTable = new AsciiTable();
             membersTable.setHeading('Name', 'Open Points');
 
-            let resultIdx = 0;
-
             if(result.length == 0){
                 return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`No member can be retrieved from the database !\n(Surely because no one has open points)`)], ephemeral: true});
             }
 
+            const perPage = 10;
+            const pagesCount = Math.ceil(result.length/perPage);
+            let actualPage = 1;
+            let resultIdx = (actualPage-1)*perPage;
+
             result.forEach(async sqlRes => {
                 resultIdx++;
 
-                membersTable.addRow(sqlRes.name, sqlRes.open_points > 0 ? sqlRes.open_points : 0);
+                membersTable.addRow(sqlRes.name.length > 17 ? sqlRes.name.slice(0, 14) + "..." : sqlRes.name, sqlRes.open_points > 0 ? sqlRes.open_points : 0);
 
-                if(resultIdx == result.length) {
-                    membersTable.sortColumn(1, (a, b) => { return b - a; });
+                if(resultIdx == perPage) {
                     membersTable.setJustify();
                     membersTable.removeBorder();
                     membersTable.setAlignCenter(1);
@@ -49,9 +51,77 @@ module.exports = {
                     let emb = new MessageEmbed()
                         .setColor(Config.Colors.Transparent)
                         .setDescription(`\`\`\`\n 👥 Members informations \n\`\`\`
-                        \`\`\`\n${membersTable.toString()}\n\`\`\``);
+                        \`\`\`\n${membersTable.toString()}\n\`\`\``)
+                        .setFooter(`Page ${actualPage}/${pagesCount}   (Navigation: ◀️ Previous | Next ▶️)`);
 
-                    await interaction.reply({embeds: [emb]});
+                    let replyMessage = await interaction.reply({embeds: [emb], fetchReply: true});
+
+                    if(pagesCount > 1){
+                        replyMessage.react('◀️').then(() => replyMessage.react('▶️'));
+
+                        const filter = (reaction, user) => {
+                            return (reaction.emoji.name === '◀️' || reaction.emoji.name === '▶️') && user.id == interaction.user.id;
+                        };
+
+                        const collector = replyMessage.createReactionCollector({filter, time: 30000});
+
+                        collector.on("collect", (reaction, user) => {
+                            reaction.users.remove(user);
+                            membersTable.clear();
+                            membersTable.setHeading('Name', 'Open Points');
+
+                            switch(reaction.emoji.name){
+                                case '◀️':
+                                    if(actualPage <= 1) return;
+                                    actualPage--;
+                                    break;
+
+                                case '▶️':
+                                    if(actualPage >= pagesCount) return;
+                                    actualPage++;
+                                    break;
+
+                                default:
+                            }
+
+                            bot.Database.query(`SELECT members.id, name, htb_token, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members ORDER BY open_points DESC LIMIT ${perPage} OFFSET ${perPage*(actualPage-1)};`, async (err, result) => {
+                                if (err){
+                                    await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
+                                    throw err;
+                                }
+
+                                if(result.length == 0){
+                                    return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`No member can be retrieved from the database !\n(Surely because no one has open points)`)], ephemeral: true});
+                                }
+
+                                resultIdx = 0;
+                                result.forEach(async sqlRes => {
+                                    resultIdx++;
+
+                                    membersTable.addRow(sqlRes.name.length > 17 ? sqlRes.name.slice(0, 14) + "..." : sqlRes.name, sqlRes.open_points > 0 ? sqlRes.open_points : 0);
+
+                                    if(resultIdx == result.length) {
+                                        membersTable.setJustify();
+                                        membersTable.removeBorder();
+                                        membersTable.setAlignCenter(1);
+
+                                        emb = new MessageEmbed()
+                                            .setColor(Config.Colors.Transparent)
+                                            .setDescription(`\`\`\`\n 👥 Members informations \n\`\`\`
+                                            \`\`\`\n${membersTable.toString()}\n\`\`\``)
+                                            .setFooter(`Page ${actualPage}/${pagesCount}   (Navigation: ◀️ Previous | Next ▶️)`);
+
+                                        replyMessage.edit({embeds: [emb]});
+                                        collector.resetTimer();
+                                    }
+                                })
+                            })
+                        })
+
+                        collector.on('end', () => {
+                            replyMessage.reactions.removeAll();
+                        })
+                    }
                 }
             })
         })

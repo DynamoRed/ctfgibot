@@ -10,7 +10,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 const bot = new Client({
-	intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES],
+	intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 	presence: {
 		status: 'online',
 		activity: { name: 'In Dev...', type: 'PLAYING' }

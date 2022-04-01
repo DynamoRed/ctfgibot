@@ -33,6 +33,7 @@
 *.sql
 *.sqlite
 *.sqlite3
+*.csv
 
 # OS generated files #
 ######################
