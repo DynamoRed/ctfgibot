@@ -1,6 +1,7 @@
 const Config = require('../../../conf');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, Permissions } = require('discord.js');
+const { start } = require('repl');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -86,11 +87,8 @@ module.exports = {
                         let endAtDate = endAt[0].split("/");
                         let endAtTime = endAt[1].split(":");
 
-                        startAt = `${startAtDate[2]}-${startAtDate[1]}-${startAtDate[0]}T${startAtTime[0]}:${startAtTime[1]}:00.000Z`;
-                        endAt = `${endAtDate[2]}-${endAtDate[1]}-${endAtDate[0]}T${endAtTime[0]}:${endAtTime[1]}:00.000Z`;
-
-                        startAt = new Date(startAt);
-                        endAt = new Date(endAt);
+                        startAt = new Date(startAtDate[2], startAtDate[1]-1, startAtDate[0], startAtTime[0], startAtTime[1]);
+                        endAt = new Date(endAtDate[2], endAtDate[1]-1, endAtDate[0], endAtTime[0], endAtTime[1]);
                     } catch(err) {
                         return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid date format !`)], ephemeral: true});
                     }
