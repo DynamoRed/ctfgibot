@@ -10,7 +10,7 @@ module.exports = {
 		.setDescription(`MODS ONLY | Export members list and their infos`),
 	async execute(interaction, bot) {
         bot.Database.query(`SELECT members.id, name, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members ORDER BY name;`, async (err, result) => {
-            if (err){
+            if(err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
             }

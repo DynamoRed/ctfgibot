@@ -54,7 +54,7 @@ module.exports = {
                         submitMail,
                         submitName,
                     ], async (err, result) => {
-                        if (err){
+                        if(err){
                             await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when saving your data !`)], ephemeral: true});
                             throw err;
                         }

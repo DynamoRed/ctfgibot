@@ -35,7 +35,7 @@ module.exports = {
 		interaction.guild.channels.cache.get(Config.Channels[guildId].LOGS).send({embeds: [logEmb]});
 
 		bot.Database.query(`SELECT id FROM members WHERE discord_id = ${interaction.user.id};`, async (err, sqlRes) => {
-            if (err){
+            if(err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
             }
@@ -44,7 +44,7 @@ module.exports = {
             const resultUser = sqlRes[0];
 
 			bot.Database.query(`SELECT name FROM sessions WHERE id = ${sessionId} AND CURRENT_TIMESTAMP() >= start_at AND CURRENT_TIMESTAMP() <= end_at;`, async (err, result) => {
-				if (err){
+				if(err){
 					await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 					throw err;
 				}
@@ -54,7 +54,7 @@ module.exports = {
 				const sessionName = result[0].name;
 
 				bot.Database.query(`SELECT id, name, points FROM sessions_targets WHERE session_id = ? AND content = ?;`, [sessionId, submittedFlag], async (err, result) => {
-					if (err){
+					if(err){
 						await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 						throw err;
 					}
@@ -65,7 +65,7 @@ module.exports = {
 					const targetPoints = result[0].points;
 
 					bot.Database.query(`SELECT id FROM sessions_targets_claims WHERE target_id = ? AND member_id = ?;`, [targetId, resultUser.id], async (err, result) => {
-						if (err){
+						if(err){
 							await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 							throw err;
 						}
@@ -73,7 +73,7 @@ module.exports = {
 						if(result.length != 0) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You can't submit this flag for the session #${sessionId} ! (Maybe cause you already submit it)`)], ephemeral: true});
 
 						bot.Database.query(`SELECT id FROM sessions_targets WHERE session_id = ${sessionId};`, async (err, result) => {
-							if (err){
+							if(err){
 								await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 								throw err;
 							}
@@ -85,13 +85,13 @@ module.exports = {
 								targetId,
 								targetPoints,
 							], async (err, result) => {
-								if (err){
+								if(err){
 									await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when saving your data !`)], ephemeral: true});
 									throw err;
 								}
 
 								bot.Database.query(`SELECT id FROM sessions_targets_claims WHERE member_id = ${resultUser.id} AND target_id IN (SELECT id FROM sessions_targets WHERE session_id = ${sessionId});`, async (err, result) => {
-									if (err){
+									if(err){
 										await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
 										throw err;
 									}

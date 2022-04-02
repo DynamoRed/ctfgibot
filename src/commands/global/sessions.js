@@ -24,7 +24,7 @@ module.exports = {
         }
 
 		bot.Database.query(`SELECT id, name, UNIX_TIMESTAMP(end_at) as end, UNIX_TIMESTAMP(start_at) as start FROM sessions WHERE ${timestampQuery};`, async (err, result) => {
-            if (err){
+            if(err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});
                 throw err;
             }
