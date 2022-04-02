@@ -5,11 +5,10 @@ const fs = require('fs');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+        .setDefaultPermission(false)
 		.setName('export')
 		.setDescription(`MODS ONLY | Export members list and their infos`),
 	async execute(interaction, bot) {
-		if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-
         bot.Database.query(`SELECT members.id, name, email, (SELECT SUM(points) FROM sessions_targets_claims WHERE sessions_targets_claims.member_id = members.id) AS open_points FROM members ORDER BY name;`, async (err, result) => {
             if (err){
                 await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when retrieving data !`)], ephemeral: true});

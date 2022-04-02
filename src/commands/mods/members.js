@@ -6,11 +6,10 @@ const AsciiTable = require('ascii-table');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+        .setDefaultPermission(false)
 		.setName('members')
 		.setDescription(`MODS ONLY | List members and their infos`),
 	async execute(interaction, bot) {
-		if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-
         https.get(`https://www.hackthebox.com/`, res => {
             let data = '';
 			res.on('data', c => { data += c });

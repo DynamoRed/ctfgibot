@@ -4,13 +4,12 @@ const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+        .setDefaultPermission(false)
 		.setName('mute')
 		.setDescription(`MODS ONLY | Mute a member`)
 		.addUserOption(opt => opt.setName('target').setDescription('User you want to mute').setRequired(true))
 		.addStringOption(opt => opt.setName('reason').setDescription('Why you want to mute him')),
 	async execute(interaction, bot) {
-		if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-
 		const guildId = interaction.guild.id;
         let target = interaction.options.getUser('target');
         let reason = interaction.options.getString('reason');

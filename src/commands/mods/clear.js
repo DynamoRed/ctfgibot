@@ -4,12 +4,11 @@ const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+        .setDefaultPermission(false)
 		.setName('clear')
 		.addIntegerOption(opt => opt.setName('count').setDescription('Number of messages to delete').setRequired(true))
 		.setDescription(`MODS ONLY | Clear message(s)`),
 	async execute(interaction, bot) {
-		if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
-
         const guildId = interaction.guild.id;
         let count = interaction.options.getInteger('count');
 

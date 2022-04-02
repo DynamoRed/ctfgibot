@@ -11,8 +11,7 @@ module.exports = {
 			await command.execute(interaction, interaction.client);
 		} catch (err) {
 			console.log(`${err}`.red);
-			await interaction.reply(
-				{
+			await interaction.reply({
 					content: `An error occurred. Please contact an Administrator !`,
 					ephmeral: true
 				}

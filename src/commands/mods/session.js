@@ -4,6 +4,7 @@ const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
+        .setDefaultPermission(false)
 		.setName('session')
 		.setDescription(`MODS ONLY | Manage CTF sessions`)
         .addSubcommand(scmd => scmd
@@ -47,8 +48,35 @@ module.exports = {
             )
         ),
 	async execute(interaction, bot) {
-        if(!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`You do not have the necessary permissions for this command`)], ephemeral: true});
+        const scmd = interaction.options.getSubcommand();
+        if(!scmd) return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid subcommand argument !`)], ephemeral: true});
 
-
+        const sgcmd = interaction.options.getSubcommandGroup();
+        if(sgcmd){
+            switch(sgcmd){
+                case "targets":
+                    switch(scmd){
+                        case "add":
+                            break;
+                        case "remove":
+                            break;
+                        case "get":
+                            break;
+                        case "list":
+                            break;
+                        default: return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid subcommand argument !`)], ephemeral: true});
+                    }
+                    break;
+                default: return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid subcommand argument !`)], ephemeral: true});
+            }
+        } else {
+            switch(scmd){
+                case "new":
+                    break;
+                case "remove":
+                    break;
+                default: return interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`Invalid subcommand argument !`)], ephemeral: true});
+            }
+        }
     }
 };
