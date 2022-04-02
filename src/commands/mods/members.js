@@ -59,9 +59,7 @@ module.exports = {
                     if(pagesCount > 1){
                         replyMessage.react('◀️').then(() => replyMessage.react('▶️'));
 
-                        const filter = (reaction, user) => {
-                            return (reaction.emoji.name === '◀️' || reaction.emoji.name === '▶️') && user.id == interaction.user.id;
-                        };
+                        const filter = (reaction, user) => { return (reaction.emoji.name === '◀️' || reaction.emoji.name === '▶️') && user.id == interaction.user.id; };
 
                         const collector = replyMessage.createReactionCollector({filter, time: 30000});
 
@@ -71,16 +69,10 @@ module.exports = {
                             membersTable.setHeading('Name', 'Open Points');
 
                             switch(reaction.emoji.name){
-                                case '◀️':
-                                    if(actualPage <= 1) return;
-                                    actualPage--;
-                                    break;
-
-                                case '▶️':
-                                    if(actualPage >= pagesCount) return;
-                                    actualPage++;
-                                    break;
-
+                                case '◀️': if(actualPage <= 1) return;
+                                    actualPage--; break;
+                                case '▶️': if(actualPage >= pagesCount) return;
+                                    actualPage++; break;
                                 default:
                             }
 

@@ -26,7 +26,7 @@ module.exports = {
             result.forEach(async sqlRes => {
                 resultIdx++;
 
-                infosStr += `\n${sqlRes.name.replace(";","_")};${sqlRes.email.replace(";","_")};${sqlRes.open_points > 0 ? sqlRes.open_points >= 4 ? 4 : sqlRes.open_points : 0};`;
+                infosStr += `\n${sqlRes.name.replace(";","_")};${sqlRes.email.replace(";","_")};${sqlRes.open_points > 0 ? sqlRes.open_points >= 4 ? 4 : sqlRes.open_points : 0}`;
 
                 if(resultIdx == result.length) {
                     fs.writeFile('./temp.csv', infosStr, (err) => {
