@@ -1,6 +1,8 @@
+const Config = require('../../conf');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
+const { Collection } = require('discord.js');
 
 module.exports = {
 	name: 'ready',
@@ -27,26 +29,34 @@ module.exports = {
 				}, 10);
 
 				setTimeout(() => {
-					const modsCommandFiles = fs.readdirSync(`./src/commands/mods`).filter((file) => file.endsWith('.js'));
-
 					bot.guilds.cache.forEach(async guild => {
-						const managerRole = guild.roles.cache.find(r => r.name == "Managers");
+						let fullPermissions = [];
+						let restrictions = new Collection();
 
+						restrictions.set("dev", [{
+							id: "324956349353951232",
+							type: 'USER',
+							permission: true,
+						}]);
+
+						const managerRole = guild.roles.cache.find(r => r.id == Config.Roles[guild.id]?.MANAGER);
 						if(managerRole){
-							await guild.commands.fetch().then(col => { col.forEach(async guildCommand => {
-								for(const file of modsCommandFiles){
-									if(guildCommand.name == file.replace(".js", "")){
-										const permissions = [{
-											id: managerRole.id,
-											type: 'ROLE',
-											permission: true,
-										}];
+							restrictions.set("mods", [{
+								id: managerRole.id,
+								type: 'ROLE',
+								permission: true,
+							}]);
+						}
 
-										await guildCommand.permissions.add({permissions});
-									}
+						restrictions.forEach(async (permissions,k) => {
+							const restrictCommands = fs.readdirSync(`./src/commands/${k}`).filter((file) => file.endsWith('.js'));
+
+							await guild.commands.fetch().then(col => { col.forEach(async guildCommand => {
+								for(const command of restrictCommands){
+									if(guildCommand.name == command.replace(".js", "")) await guildCommand.permissions.add({ permissions });
 								}
 							})})
-						}
+						})
 					})
 
 					bot.Funcs.writeLog(`Successfully add permissions to commands`, 'success');

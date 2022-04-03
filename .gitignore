@@ -13,7 +13,6 @@
 *.env
 .env
 ./.env
-./.vscode
 
 # Packages #
 ############
@@ -56,3 +55,4 @@ cfg/
 #####################
 node_modules/
 package-lock.json
+.vscode/

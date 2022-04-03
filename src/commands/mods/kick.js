@@ -18,19 +18,26 @@ module.exports = {
 		try {
 			gTarget.kick(`${reason ? reason : ""}`);
 
-			let emb = new MessageEmbed()
-				.setColor(Config.Colors.Green)
-				.setDescription(`\`\`\`\n 🔇User kicked \n\`\`\`
-				» ${target} kicked by ${interaction.user}`);
+			bot.Database.query(`INSERT INTO punishments (user_id, type, reason, punish_by) VALUES (?, "KICK", ?, ?);`, [target.id, reason || "No reason", interaction.user.id], async (err, result) => {
+				if(err){
+					await interaction.reply({embeds: [bot.Funcs.getErrorEmbed(`An error occurred when saving your data !`)], ephemeral: true});
+					throw err;
+				}
 
-			let logEmb = new MessageEmbed()
-				.setColor(Config.Colors.Transparent)
-				.setDescription(`\`\`\`\n 🔇User kicked \n\`\`\`
-				» ${interaction.user} just kick ${target} ${reason ? `for the reason: \`${reason}\`` : ''}`);
+				let emb = new MessageEmbed()
+					.setColor(Config.Colors.Green)
+					.setDescription(`\`\`\`\n 👊 User kicked \n\`\`\`
+					» ${target} kicked by ${interaction.user}`);
 
-			interaction.guild.channels.cache.get(Config.Channels[guildId].LOGS).send({embeds: [logEmb]});
+				let logEmb = new MessageEmbed()
+					.setColor(Config.Colors.Transparent)
+					.setDescription(`\`\`\`\n 👊 User kicked \n\`\`\`
+					» ${interaction.user} just kick ${target} ${reason ? `for the reason: \`${reason}\`` : ''}`);
 
-			await interaction.reply({embeds: [emb]});
+				interaction.guild.channels.cache.get(Config.Channels[guildId].LOGS).send({embeds: [logEmb]});
+
+				await interaction.reply({embeds: [emb]});
+			})
 		} catch (e) {
 			throw e;
 		}
